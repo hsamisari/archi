@@ -3,7 +3,7 @@
  * are made available under the terms of the License
  * which accompanies this distribution in the file LICENSE.txt
  */
-package com.archimatetool.canvas.propertysections;
+package com.archimatetool.editor.propertysections;
 
 import java.io.File;
 
@@ -35,17 +35,12 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.PlatformUI;
 
-import com.archimatetool.canvas.model.ICanvasPackage;
-import com.archimatetool.canvas.model.IIconic;
 import com.archimatetool.editor.Logger;
 import com.archimatetool.editor.model.IArchiveManager;
 import com.archimatetool.editor.model.commands.EObjectFeatureCommand;
-import com.archimatetool.editor.propertysections.DiagramModelImageSection;
-import com.archimatetool.editor.propertysections.IObjectFilter;
-import com.archimatetool.editor.propertysections.ITabbedLayoutConstants;
-import com.archimatetool.editor.propertysections.ObjectFilter;
 import com.archimatetool.editor.ui.ImageFactory;
 import com.archimatetool.model.IArchimatePackage;
+import com.archimatetool.model.IIconic;
 
 
 
@@ -78,21 +73,21 @@ public class IconSection extends DiagramModelImageSection {
     private static final int IMAGE_SIZE = 100;
     
     private static final String[] fComboPositionItems = {
-        Messages.IconSection_0,
-        Messages.IconSection_1,
-        Messages.IconSection_2,
-        Messages.IconSection_3,
-        Messages.IconSection_4,
-        Messages.IconSection_5,
-        Messages.IconSection_6,
-        Messages.IconSection_7,
-        Messages.IconSection_8,
+        "Top Left",
+        "Top Centre",
+        "Top Right",
+        "Middle Left",
+        "Middle Centre",
+        "Middle Right",
+        "Bottom Left",
+        "Bottom Centre",
+        "Bottom Right",
     };
     
     
     @Override
     protected void createControls(Composite parent) {
-        createLabel(parent, Messages.IconSection_9, ITabbedLayoutConstants.STANDARD_LABEL_WIDTH, SWT.NONE);
+        createLabel(parent, "Preview:", ITabbedLayoutConstants.STANDARD_LABEL_WIDTH, SWT.NONE);
         
         fCanvas = new Canvas(parent, SWT.BORDER);
         getWidgetFactory().adapt(fCanvas);
@@ -141,7 +136,7 @@ public class IconSection extends DiagramModelImageSection {
             }
         });
         
-        String tooltip = Messages.IconSection_10;
+        String tooltip = "Drag an image onto here or double-click to select";
         fCanvas.setToolTipText(tooltip);
         
         DropTarget target = new DropTarget(fCanvas, DND.DROP_MOVE | DND.DROP_COPY | DND.DROP_DEFAULT);
@@ -163,7 +158,7 @@ public class IconSection extends DiagramModelImageSection {
         createImageButton(parent);
         
         // Position
-        createLabel(parent, Messages.IconSection_11, ITabbedLayoutConstants.STANDARD_LABEL_WIDTH, SWT.CENTER);
+        createLabel(parent, "Position:", ITabbedLayoutConstants.STANDARD_LABEL_WIDTH, SWT.CENTER);
 
         fComboPosition = new Combo(parent, SWT.READ_ONLY);
         fComboPosition.setItems(fComboPositionItems);
@@ -176,9 +171,9 @@ public class IconSection extends DiagramModelImageSection {
 
                 for(EObject iconic : getEObjects()) {
                     if(isAlive(iconic)) {
-                        Command cmd = new EObjectFeatureCommand(Messages.IconSection_12,
+                        Command cmd = new EObjectFeatureCommand("Icon Position",
                                 iconic,
-                                ICanvasPackage.Literals.ICONIC__IMAGE_POSITION,
+                                IArchimatePackage.Literals.ICONIC__IMAGE_POSITION,
                                 fComboPosition.getSelectionIndex());
                         
                         if(cmd.canExecute()) {
@@ -209,7 +204,7 @@ public class IconSection extends DiagramModelImageSection {
                 refreshPreviewImage();
             }
             else if(feature == IArchimatePackage.Literals.LOCKABLE__LOCKED
-                    || feature == ICanvasPackage.Literals.ICONIC__IMAGE_POSITION) {
+                    || feature == IArchimatePackage.Literals.ICONIC__IMAGE_POSITION) {
                 refreshButtons();
             }
         }
